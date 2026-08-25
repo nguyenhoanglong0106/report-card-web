@@ -1,0 +1,19 @@
+{
+  "name": "phieu-bao-diem-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web tạo Sheet2 và phiếu báo điểm từ Excel lớp học",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "docxtemplater": "^3.67.4",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "jszip": "^3.10.1",
+    "multer": "^2.0.2",
+    "pizzip": "^3.2.0"
+  }
+}
