@@ -79,8 +79,11 @@ function buildStudents(sheet1) {
     students.push(s);
   }
   rankScores(students, 'hk1Avg');
+  rankScores(students, 'hk1Attendance');
   rankScores(students, 'hk2Avg');
+  rankScores(students, 'hk2Attendance');
   rankScores(students, 'yearAvg');
+  rankScores(students, 'totalAttendance');
   return students;
 }
 

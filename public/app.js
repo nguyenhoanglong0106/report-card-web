@@ -5,6 +5,36 @@ let currentFile = null;
 let students = [];
 
 const file = $('#file'), msg = $('#msg'), tbody = $('#tbody');
+const summaryTotal = $('#summaryTotal'), summaryRows = $('#summaryRows');
+const classifyOrder = ['Xuất Sắc', 'Giỏi', 'Khá', 'Trung Bình', 'Yếu'];
+
+function percent(count, total) {
+  if (!total) return '0%';
+  const value = (count / total) * 100;
+  return `${Number.isInteger(value) ? value : value.toFixed(1)}%`;
+}
+
+function renderSummary() {
+  const total = students.length;
+  summaryTotal.textContent = `${total} học sinh`;
+  const counts = Object.fromEntries(classifyOrder.map((name) => [name, 0]));
+  students.forEach((student) => {
+    const key = classifyOrder.find((name) => name.toLowerCase() === String(student.yearClassify || '').toLowerCase());
+    if (key) counts[key]++;
+  });
+  summaryRows.innerHTML = classifyOrder
+    .map((name) => {
+      const count = counts[name];
+      const pct = percent(count, total);
+      return `<div class="summary-row">
+        <span>${name}</span>
+        <div class="summary-bar"><i style="width:${pct}"></i></div>
+        <b>${count}</b>
+        <em>${pct}</em>
+      </div>`;
+    })
+    .join('');
+}
 
 function setMsg(t, type = '') {
   msg.textContent = t;
@@ -107,6 +137,7 @@ async function downloadExcel() {
 }
 
 function renderTable() {
+  renderSummary();
   if (!students.length) {
     tbody.innerHTML = '<tr><td colspan="15" class="empty">Chưa có dữ liệu</td></tr>';
     return;
@@ -150,6 +181,7 @@ file.addEventListener('change', async () => {
   } catch (e) {
     students = [];
     renderTable();
+    $('#count').textContent = '';
     setMsg(e.message || 'Không đọc được dữ liệu.', 'error');
   }
 });
@@ -162,3 +194,4 @@ tbody.addEventListener('click', (e) => {
 
 $('#excelBtn').addEventListener('click', downloadExcel);
 $('#allBtn').addEventListener('click', downloadAll);
+renderSummary();
